@@ -1,29 +1,51 @@
 {% extends "recipes/base.html" %}
 
 {% block content %}
-    <div class="filter-bar">
-        <a href="{% url 'recipe_list' %}" class="chip {% if not active_category %}active{% endif %}">All</a>
+    <section class="text-center mb-10">
+        <h1 class="text-4xl font-extrabold mb-3">Cook something good tonight</h1>
+        <p class="text-stone-500 max-w-xl mx-auto">
+            A small collection of tested, no-fuss recipes — from weeknight dinners to Sunday baking.
+        </p>
+    </section>
+
+    <div class="flex gap-2 flex-wrap justify-center mb-8">
+        <a href="{% url 'recipe_list' %}"
+           class="px-4 py-1.5 rounded-full text-sm font-semibold border transition
+                  {% if not active_category %}bg-terracotta-500 text-white border-terracotta-500
+                  {% else %}bg-white text-stone-500 border-stone-200 hover:border-terracotta-400{% endif %}">
+            All
+        </a>
         {% for category in categories %}
-            <a href="?category={{ category.slug }}" class="chip {% if active_category == category.slug %}active{% endif %}">{{ category.name }}</a>
+            <a href="?category={{ category.slug }}"
+               class="px-4 py-1.5 rounded-full text-sm font-semibold border transition
+                      {% if active_category == category.slug %}bg-terracotta-500 text-white border-terracotta-500
+                      {% else %}bg-white text-stone-500 border-stone-200 hover:border-terracotta-400{% endif %}">
+                {{ category.name }}
+            </a>
         {% endfor %}
     </div>
 
     {% if query %}
-        <p class="result-note">Showing results for &ldquo;{{ query }}&rdquo;</p>
+        <p class="text-center text-stone-500 mb-6">Showing results for &ldquo;{{ query }}&rdquo;</p>
     {% endif %}
 
     {% if recipes %}
-        <div class="recipe-grid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for recipe in recipes %}
-                <a class="recipe-card" href="{{ recipe.get_absolute_url }}">
-                    <div class="card-top">
-                        <span class="difficulty difficulty--{{ recipe.difficulty }}">{{ recipe.get_difficulty_display }}</span>
+                <a href="{{ recipe.get_absolute_url }}"
+                   class="group bg-white rounded-2xl border border-stone-200 overflow-hidden flex flex-col
+                          transition duration-200 hover:shadow-xl hover:-translate-y-1">
+                    <div class="h-20 flex items-end justify-end p-3 bg-gradient-to-br
+                                {% cycle 'from-terracotta-500 to-terracotta-400' 'from-sage-500 to-sage-400' 'from-amber-500 to-amber-400' %}">
+                        <span class="text-xs font-bold uppercase tracking-wide text-white bg-black/20 rounded-full px-2.5 py-1">
+                            {{ recipe.get_difficulty_display }}
+                        </span>
                     </div>
-                    <div class="card-body">
-                        <span class="card-category">{{ recipe.category.name }}</span>
-                        <h2>{{ recipe.title }}</h2>
-                        <p>{{ recipe.description }}</p>
-                        <div class="card-meta">
+                    <div class="p-5 flex flex-col flex-1">
+                        <span class="text-xs font-bold uppercase tracking-wide text-terracotta-600 mb-1">{{ recipe.category.name }}</span>
+                        <h2 class="text-lg font-bold mb-2 group-hover:text-terracotta-600 transition">{{ recipe.title }}</h2>
+                        <p class="text-sm text-stone-500 mb-4 flex-1">{{ recipe.description }}</p>
+                        <div class="flex gap-4 text-sm text-stone-500 border-t border-stone-100 pt-3">
                             <span>⏱ {{ recipe.total_minutes }} min</span>
                             <span>🍽 {{ recipe.servings }} servings</span>
                         </div>
@@ -33,17 +55,23 @@
         </div>
 
         {% if is_paginated %}
-            <div class="pagination">
+            <div class="flex items-center justify-center gap-4 mt-10 text-sm text-stone-500">
                 {% if page_obj.has_previous %}
-                    <a href="?{% if query %}q={{ query }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ page_obj.previous_page_number }}">&laquo; Prev</a>
+                    <a class="font-semibold text-terracotta-600 hover:underline"
+                       href="?{% if query %}q={{ query }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                        &laquo; Prev
+                    </a>
                 {% endif %}
                 <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
                 {% if page_obj.has_next %}
-                    <a href="?{% if query %}q={{ query }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ page_obj.next_page_number }}">Next &raquo;</a>
+                    <a class="font-semibold text-terracotta-600 hover:underline"
+                       href="?{% if query %}q={{ query }}&{% endif %}{% if active_category %}category={{ active_category }}&{% endif %}page={{ page_obj.next_page_number }}">
+                        Next &raquo;
+                    </a>
                 {% endif %}
             </div>
         {% endif %}
     {% else %}
-        <p class="empty-state">No recipes found. Try a different search or category.</p>
+        <p class="text-center text-stone-500 py-16">No recipes found. Try a different search or category.</p>
     {% endif %}
 {% endblock %}

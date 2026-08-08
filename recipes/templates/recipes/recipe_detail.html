@@ -3,45 +3,66 @@
 {% block title %}{{ recipe.title }} — The Recipe Box{% endblock %}
 
 {% block content %}
-    <a class="back-link" href="{% url 'recipe_list' %}">&larr; Back to all recipes</a>
+    <a href="{% url 'recipe_list' %}" class="text-stone-500 hover:text-terracotta-600 font-semibold text-sm mb-6 inline-block">
+        &larr; Back to all recipes
+    </a>
 
-    <article class="recipe-detail">
-        <header class="recipe-detail-header">
-            <span class="card-category">{{ recipe.category.name }}</span>
-            <h1>{{ recipe.title }}</h1>
-            <p>{{ recipe.description }}</p>
+    <article>
+        <header class="bg-white rounded-2xl border border-stone-200 p-8 mb-6">
+            <span class="text-xs font-bold uppercase tracking-wide text-terracotta-600">{{ recipe.category.name }}</span>
+            <h1 class="text-3xl font-extrabold mt-2 mb-3">{{ recipe.title }}</h1>
+            <p class="text-stone-500 text-lg">{{ recipe.description }}</p>
         </header>
 
-        <div class="recipe-stats">
-            <div><strong>Prep</strong><span>{{ recipe.prep_minutes }} min</span></div>
-            <div><strong>Cook</strong><span>{{ recipe.cook_minutes }} min</span></div>
-            <div><strong>Servings</strong><span>{{ recipe.servings }}</span></div>
-            <div><strong>Difficulty</strong><span>{{ recipe.get_difficulty_display }}</span></div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+            <div class="bg-white rounded-xl border border-stone-200 p-4 text-center">
+                <div class="text-xs font-bold uppercase tracking-wide text-stone-400">Prep</div>
+                <div class="text-lg font-bold text-terracotta-600">{{ recipe.prep_minutes }} min</div>
+            </div>
+            <div class="bg-white rounded-xl border border-stone-200 p-4 text-center">
+                <div class="text-xs font-bold uppercase tracking-wide text-stone-400">Cook</div>
+                <div class="text-lg font-bold text-terracotta-600">{{ recipe.cook_minutes }} min</div>
+            </div>
+            <div class="bg-white rounded-xl border border-stone-200 p-4 text-center">
+                <div class="text-xs font-bold uppercase tracking-wide text-stone-400">Servings</div>
+                <div class="text-lg font-bold text-terracotta-600">{{ recipe.servings }}</div>
+            </div>
+            <div class="bg-white rounded-xl border border-stone-200 p-4 text-center">
+                <div class="text-xs font-bold uppercase tracking-wide text-stone-400">Difficulty</div>
+                <div class="text-lg font-bold text-terracotta-600">{{ recipe.get_difficulty_display }}</div>
+            </div>
         </div>
 
         {% if recipe.tags.all %}
-            <div class="tag-list">
+            <div class="flex gap-2 flex-wrap mb-8">
                 {% for tag in recipe.tags.all %}
-                    <span class="tag">{{ tag.name }}</span>
+                    <span class="bg-sage-100 text-sage-600 text-xs font-semibold px-3 py-1 rounded-full">{{ tag.name }}</span>
                 {% endfor %}
             </div>
         {% endif %}
 
-        <div class="recipe-columns">
+        <div class="grid md:grid-cols-[1fr_1.4fr] gap-8 bg-white rounded-2xl border border-stone-200 p-8">
             <section>
-                <h2>Ingredients</h2>
-                <ul class="ingredient-list">
+                <h2 class="text-lg font-bold mb-4">Ingredients</h2>
+                <ul class="space-y-2">
                     {% for ingredient in recipe.ingredient_list %}
-                        <li>{{ ingredient }}</li>
+                        <li class="flex gap-2 text-stone-600">
+                            <span class="text-terracotta-500">&bull;</span>{{ ingredient }}
+                        </li>
                     {% endfor %}
                 </ul>
             </section>
 
             <section>
-                <h2>Instructions</h2>
-                <ol class="instruction-list">
+                <h2 class="text-lg font-bold mb-4">Instructions</h2>
+                <ol class="space-y-4">
                     {% for step in recipe.instruction_list %}
-                        <li>{{ step }}</li>
+                        <li class="flex gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full bg-terracotta-500 text-white text-xs font-bold flex items-center justify-center">
+                                {{ forloop.counter }}
+                            </span>
+                            <span class="text-stone-600">{{ step }}</span>
+                        </li>
                     {% endfor %}
                 </ol>
             </section>
