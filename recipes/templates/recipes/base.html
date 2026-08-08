@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}The Recipe Box{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'recipes/css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="{% url 'recipe_list' %}">🍲 The Recipe Box</a>
+            <form class="search-form" method="get" action="{% url 'recipe_list' %}">
+                <input type="text" name="q" placeholder="Search recipes…" value="{{ query|default:'' }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="wrap">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">Made with Django &mdash; a home-cooking recipe box.</div>
+    </footer>
+</body>
+</html>

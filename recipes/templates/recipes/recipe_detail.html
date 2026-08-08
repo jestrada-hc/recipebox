@@ -1,0 +1,50 @@
+{% extends "recipes/base.html" %}
+
+{% block title %}{{ recipe.title }} — The Recipe Box{% endblock %}
+
+{% block content %}
+    <a class="back-link" href="{% url 'recipe_list' %}">&larr; Back to all recipes</a>
+
+    <article class="recipe-detail">
+        <header class="recipe-detail-header">
+            <span class="card-category">{{ recipe.category.name }}</span>
+            <h1>{{ recipe.title }}</h1>
+            <p>{{ recipe.description }}</p>
+        </header>
+
+        <div class="recipe-stats">
+            <div><strong>Prep</strong><span>{{ recipe.prep_minutes }} min</span></div>
+            <div><strong>Cook</strong><span>{{ recipe.cook_minutes }} min</span></div>
+            <div><strong>Servings</strong><span>{{ recipe.servings }}</span></div>
+            <div><strong>Difficulty</strong><span>{{ recipe.get_difficulty_display }}</span></div>
+        </div>
+
+        {% if recipe.tags.all %}
+            <div class="tag-list">
+                {% for tag in recipe.tags.all %}
+                    <span class="tag">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="recipe-columns">
+            <section>
+                <h2>Ingredients</h2>
+                <ul class="ingredient-list">
+                    {% for ingredient in recipe.ingredient_list %}
+                        <li>{{ ingredient }}</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <section>
+                <h2>Instructions</h2>
+                <ol class="instruction-list">
+                    {% for step in recipe.instruction_list %}
+                        <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            </section>
+        </div>
+    </article>
+{% endblock %}
